@@ -7,7 +7,7 @@ const {width, height} = Dimensions.get('screen');
 // inspiration: https://dribbble.com/shots/11164698-Onboarding-screens-animation
 // https://twitter.com/mironcatalin/status/1321180191935373312
 
-const bgs = ['#A5BBFF', '#DDBEFE', '#FF63ED', '#B98EFF', '#333'];
+const bgs = ['#333', '#f04434' ,'#79e37b', '#DDBEFE', '#FF63ED', '#B98EFF', '#333', '#c4b6d4', '#76ff98', '#f47270', '#2a98f8'];
 
 
 const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
@@ -19,38 +19,42 @@ const Indicator = ({scrollX, holidays}) => {
 
     return <View style={{position:'absolute', bottom:100, flexDirection:'row'}}>
         
-        {holidays.map((_, i) => {
+        { 
+        holidays ? 
+            holidays.map((_, i) => {
+                const inputRange = [(i -1) * width, i * width, (i + 1) * width ];             
 
-            const inputRange = [(i -1) * width, i * width, (i + 1) * width ];             
+                const scale = scrollX.interpolate({
+                    inputRange,
+                    outputRange: [0.8, 1.4, 0.8],
+                    extrapolate: 'clamp'
+                });
+                const opacity = scrollX.interpolate({
+                    inputRange,
+                    outputRange: [0.6, 0.9, 0.6],
+                    extrapolate: 'clamp'
+                });
 
-            const scale = scrollX.interpolate({
-                inputRange,
-                outputRange: [0.8, 1.4, 0.8],
-                extrapolate: 'clamp'
-            });
-            const opacity = scrollX.interpolate({
-                inputRange,
-                outputRange: [0.6, 0.9, 0.6],
-                extrapolate: 'clamp'
-            });
-
-            return (
-                <Animated.View
-                    key={`indicator-${i}`}
-                    style={{
-                        height:10,
-                        width:10,
-                        borderRadius:5,
-                        backgroundColor:'#fff',
-                        margin:5,
-                        opacity,
-                        transform: [{
-                            scale,
-                        }]
-                    }}>
-                </Animated.View>
-            )
-        })}
+                return (
+                    <Animated.View
+                        key={`indicator-${i}`}
+                        style={{
+                            height:10,
+                            width:10,
+                            borderRadius:5,
+                            backgroundColor:'#fff',
+                            margin:5,
+                            opacity,
+                            transform: [{
+                                scale,
+                            }]
+                        }}>
+                    </Animated.View>
+                )
+            }) 
+            :
+            console.log('not yet')
+        }
           
         
     </View>
@@ -79,7 +83,7 @@ export default function App() {
     
     const scrollX = React.useRef(new Animated.Value(0)).current;
 
-    const [holidays, setHolidays] = useState({});
+    const [holidays, setHolidays] = useState();
     const [year, setYear] = useState(new Date().getFullYear());
     
     const setNext = (holidays) => {
@@ -88,8 +92,6 @@ export default function App() {
           day: now.getDate(),
           month: now.getMonth() + 1
         };
-        
-        console.log(today);
         // change < for >
         let holiday = holidays.filter(h => h.mes === today.month && h.dia > today.day ||  h.mes < today.month );
         if (!holiday){
