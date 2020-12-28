@@ -7,7 +7,7 @@ const {width, height} = Dimensions.get('screen');
 // inspiration: https://dribbble.com/shots/11164698-Onboarding-screens-animation
 // https://twitter.com/mironcatalin/status/1321180191935373312
 
-const bgs = ['#333', '#f04434' ,'#79e37b', '#DDBEFE', '#FF63ED', '#B98EFF', '#333', '#c4b6d4', '#76ff98', '#f47270', '#2a98f8'];
+const bgs = ['#333', '#f04434' , '#DDBEFE', '#FF63ED', '#B98EFF', '#333', '#c4b6d4', '#76ff98', '#f47270', '#2a98f8'];
 
 
 const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
@@ -22,8 +22,7 @@ const Indicator = ({scrollX, holidays}) => {
         { 
         holidays ? 
             holidays.map((_, i) => {
-                const inputRange = [(i -1) * width, i * width, (i + 1) * width ];             
-
+                const inputRange = [(i -1) * width, i * width, (i + 1) * width ];
                 const scale = scrollX.interpolate({
                     inputRange,
                     outputRange: [0.8, 1.4, 0.8],
@@ -118,7 +117,7 @@ export default function App() {
             
             <Animated.FlatList 
                 data={holidays}
-                keyExtractor={item => item.id}
+                keyExtractor={(item, index) => index}
                 contentContainerStyle={{
                     paddingBottom:100
                 }}
